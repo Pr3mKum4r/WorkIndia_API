@@ -1,7 +1,7 @@
 const db = require("../db");
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
-const crypto = require('crypto');
+const bcrypt = require('bcrypt')
 
 const signToken = id =>{
     return jwt.sign({id: id}, process.env.JWT_SECRET, {
@@ -50,20 +50,21 @@ const signup = async (req, res, next) => {
 
       createSendToken(newUser, res, 'Account successfully created');
   } catch (error) {
+      console.log(error);
       return next(new AppError('Something went wrong', 500));
   }
 };
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  if (!email || !password) {
-      return next(new AppError('Please provide email and password', 400));
+  if (!username || !password) {
+      return next(new AppError('Please provide username and password', 400));
   }
 
   try {
       const user = await db.user.findUnique({
-          where: { email: email },
+          where: { username: username },
           select: {
               id: true,
               username: true,
@@ -79,8 +80,6 @@ const login = async (req, res, next) => {
       createSendToken(user, res, 'Login successful');
   } catch (error) {
       return next(new AppError('Something went wrong', 500));
-  } finally {
-      await prisma.$disconnect();
   }
 };
 
