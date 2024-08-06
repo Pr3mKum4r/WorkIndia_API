@@ -21,8 +21,8 @@ model DiningPlace {
   address          String
   phone_no         String
   website          String
-  open_time        DateTime
-  close_time       DateTime
+  open_time        String
+  close_time       String
   bookedSlots      BookedSlot[]
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt

@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt')
 const addDiningPlace = async (req, res, next) => {
     const { name, address, phone_no, website, operational_hours } = req.body;
 
+    console.log(req.body);
+
     if (!name || !address || !phone_no || !website || !operational_hours || !operational_hours.open_time || !operational_hours.close_time) {
         return next(new AppError('Please provide all required fields', 400));
     }
@@ -18,7 +20,6 @@ const addDiningPlace = async (req, res, next) => {
                 website,
                 open_time: operational_hours.open_time,
                 close_time: operational_hours.close_time,
-                bookedSlots: []
                 },
             },
         );
@@ -29,6 +30,7 @@ const addDiningPlace = async (req, res, next) => {
             status_code: 200,
         });
     } catch (error) {
+        console.log(error);
         return next(new AppError('Something went wrong', 500));
     } 
 };
